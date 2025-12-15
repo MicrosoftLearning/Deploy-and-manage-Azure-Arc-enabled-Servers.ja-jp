@@ -216,9 +216,12 @@ lab:
 1. Windows PowerShell ISE スクリプト ペインで、Windows Admin Center をインストールする次のスクリプトを入力し、ツール バーの緑色の矢印アイコンを選択して実行します。
 
     ```powershell
-    Invoke-WebRequest 'https://aka.ms/WACDownload' -OutFile "$pwd\WAC.msi"
-    $msiArgs = @("/i", "$pwd\WAC.msi", "/qn", "/L*v", "log.txt", "SME_PORT=443", "SSL_CERTIFICATE_OPTION=generate")
-    Start-Process msiexec.exe -Wait -ArgumentList $msiArgs
+    $parameters = @{
+         Source = "https://aka.ms/WACdownload"
+         Destination = ".\WindowsAdminCenter.exe"
+    }
+    Start-BitsTransfer @parameters
+    Start-Process -FilePath '.\WindowsAdminCenter.exe' -ArgumentList '/VERYSILENT' -Wait
     ```
 
     > **注:**  Windows Admin Center のインストールが完了するまで待ちます。 インストールには約 3 分かかります。 [https://localhost](https://localhost) 経由でアクセス可能な Windows Admin Center ゲートウェイ コンポーネントがプロビジョニングされ、60 日間有効な自己署名証明書によってセキュリティで保護されます。
